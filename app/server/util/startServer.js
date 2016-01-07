@@ -3,7 +3,7 @@ import {resolve} from "path"
 import compression from "compression"
 import serveStatic from "serve-static"
 import bodyParser from "body-parser"
-
+import {info} from "./logger"
 
 export default (initFn) => {
   const app = express()
@@ -20,7 +20,7 @@ export default (initFn) => {
   initFn(app)
 
   const server = app.listen(process.env.PORT || 3000, () => {
-    console.log("Server listening at port %s", server.address().port) // eslint-disable-line
+    info("Server listening at port %s", server.address().port) // eslint-disable-line
   })
 }
 

@@ -1,8 +1,22 @@
-//import Kefir from "kefir"
-//import Model from "kefir-model"
+import Kefir from "kefir"
+import Model from "kefir-model"
+
+import {loadTracks} from "./api"
+
 
 export default initial => {
-  return initial
+  const withDefaults = {
+    tracks: [],
+    ...initial
+  }
+
+  const model =
+    Model(withDefaults)
+
+  const tracks =
+    model.lens("tracks")
+
+  tracks.plug(loadTracks())
+
+  return { tracks }
 }
-
-

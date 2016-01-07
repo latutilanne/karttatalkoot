@@ -17,7 +17,7 @@
     "bundle:web:js": "NODE_PATH=app browserify app/client/web -t babelify -g envify -g uglifyify > public/bundle.js",
     "bundle:web:css": "lessc $LESSC_MIN --autoprefix='> 0%' app/client/web/App.less > public/.bundle.css && mv public/.bundle.css public/bundle.css",
     "watch": "npm run watch:server & npm run watch:web:js & npm run watch:web:css & npm run reload:css & wait",
-    "watch:server": "NODE_PATH=app nodemon -e js,json --watch app app.js",
+    "watch:server": "NODE_PATH=app nodemon -e js,json --ignore app/client --watch app app.js",
     "watch:web:js": "NODE_PATH=app watchify app/client/web -v -t [ babelify --sourceMaps=inline ] -g envify -p livereactload -o public/bundle.js",
     "watch:web:css": "npm run bundle:web:css && watch-run -p 'app/client/web/**/*.less' npm run bundle:web:css",
     "reload:css": "node --eval \"require('livereload').createServer({exclusions: [/\\.js/]}).watch('public');\""
@@ -25,6 +25,7 @@
   "dependencies": {
     "babel": "^5.8.34",
     "babelify": "^6.3.0",
+    "bluebird": "^3.1.1",
     "body-parser": "^1.14.2",
     "browserify": "^12.0.1",
     "compression": "^1.6.0",
@@ -36,12 +37,17 @@
     "less-plugin-autoprefix": "^1.5.1",
     "lodash": "^3.10.1",
     "md5": "^2.0.0",
+    "promised-routes": "^0.3.0",
+    "ramda": "^0.19.1",
     "react": "^0.14.5",
     "react-combinators": "^0.3.0",
     "react-dom": "^0.14.2",
     "react-google-maps": "^4.7.2",
+    "request": "^2.67.0",
     "serve-static": "^1.10.0",
-    "uglifyify": "^3.0.1"
+    "superagent": "^1.6.1",
+    "uglifyify": "^3.0.1",
+    "winston": "^2.1.1"
   },
   "devDependencies": {
     "babel-eslint": "^4.1.3",
