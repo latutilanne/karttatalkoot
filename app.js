@@ -1,2 +1,6 @@
 require("babel/register")
-require("./app/server")
+
+var context = require("./app/context")
+var server = require("./app/server")
+
+server(context)

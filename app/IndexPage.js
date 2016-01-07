@@ -10,7 +10,7 @@ const jsHash =
   md5(readFileSync(resolve(__dirname, "../public/bundle.js")).toString())
 
 
-export default ({initialState}) =>
+export default ({initialState, gmapsApiKey}) =>
   <html>
     <head>
       <title>Node quickstart</title>
@@ -18,6 +18,7 @@ export default ({initialState}) =>
     </head>
     <body>
       <div id="app" data-initial-state={JSON.stringify(initialState)}></div>
+      <script type="text/javascript" src={"https://maps.googleapis.com/maps/api/js?key=" + gmapsApiKey}></script>
       <script type="text/javascript" src={`/public/bundle.js?hash=${jsHash}`}></script>
     </body>
   </html>

@@ -10,7 +10,7 @@ export default (initFn) => {
 
   app.use(bodyParser.json())
   app.use(compression())
-  app.use("/public", serveStatic(resolve(__dirname, "../../public"), {
+  app.use("/public", serveStatic(resolve(__dirname, "../../../public"), {
     setHeaders(res) {
       const control = process.env.NODE_ENV === "production" ? "public, max-age=31536000" : "private, max-age=0, no-cache"
       res.set("Cache-Control", control)

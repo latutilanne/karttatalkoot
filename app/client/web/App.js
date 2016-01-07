@@ -1,11 +1,11 @@
 import React from "react"
 import {stateless} from "client/components"
 
+import Map from "./components/Map"
+
+
 export default stateless(({model}) =>
-  <div>
-    <h1 className="title">Node.js quickstart</h1>
-    <p className="author">
-      By {model.lens("author")}
-    </p>
+  <div className="full-screen">
+    <Map model={model} />
   </div>
 )
