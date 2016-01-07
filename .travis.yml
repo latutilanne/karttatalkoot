@@ -1,3 +1,11 @@
 language: node_js
 node_js:
-  - "4.2.0"
+  - 4.2.0
+deploy:
+  provider: heroku
+  api_key:
+    secure: rw53XEus0bj5rxsBifK2N9Qpsxy+2N8sfBe20RrX0ZwCtkTD+zIFcjw2CfZOW12ki7JFXxL+WiAlD2IgUr8xfslcQYdayMfVUy5GuoIyNkKlc+nJ9wYVl45M3iHw5K/LGyuXQp8U/GjSQ0KxWi5UyXtlIKJoxxZrhchRia65t1Xw5ThVksPQUZiNG/fzEqhYFUKwtdxsR8gYpRSYwcHAIpftYU7FUu1yyG28IEnTl1OI7XdtItQkVXZeYWawVn7SN8WzKOP7kJKlgPLqvEpeD26MbJbLzC5IwMkGPXaJl3hgtCGODdOEUxwUZ4TDxCa++palFXQcTMFfJQxRQj2+zC8OfYEYuHtqV4vbwwD6Dxw1TreQVODAPDc/kiy1LT2+sPZfjXno5pka2wBo9R3VaMBLn7MUupV5prwrSOlHTiOSgpVGyjUaTmkPsAUOzkFRoyMtYFgnuIgdWq7z/byy4fuR+XenK1lgHF9qMwFUrb12dIV72y9uLM6raDRNd6CdSF7nNhHka66COM14a0kRLn2xXSfHC+yOAmkER7QYzbj92qZlbxn5sBWQ/rWKyoiBTwpUe5Dg4/NgiAEcb7RBRTl4AXT2M0HC6v75BxHPQBGmhJs5+Wvi1YpXh1O3w7QPBRSuGPFScr9soCQtArom1jPg9yJrHLr+KZEip8j8h3A=
+  app: karttatalkoot-test
+  on:
+    repo: latutilanne/karttatalkoot
+    branch: master
