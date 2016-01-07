@@ -1,6 +1,7 @@
 {
-  "name": "node-quickstart",
-  "version": "2.1.0",
+  "name": "karttatalkoot",
+  "version": "0.1.0",
+  "description": "OSM-hiihtourien linkitys ladut.fi-karttadataan",
   "author": "Matti Lankinen <m.lankinen@iki.fi>",
   "license": "MIT",
   "private": true,
