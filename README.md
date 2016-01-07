@@ -5,7 +5,7 @@ Tämä projekti sisältää web-sovelluksen, jonka avulla voidaan linkittää
 saatavat latu-urat sekä muut hiihtämistä edistävästä meta-tiedot
 [kartta.latutilanne.fi](http://kartta.latutilanne.fi) latutietoihin.
 
-[![Build-status](https://img.shields.io/travis/latutilanne/karttatalkoot/master.svg)](https://img.shields.io/travis/latutilanne/karttatalkoot/master.svg)
+[![Build-status](https://img.shields.io/travis/latutilanne/karttatalkoot/master.svg?style=flat-square)](https://travis-ci.org/latutilanne/karttatalkoot/branches/)
 
 
 ## Osallistuminen
