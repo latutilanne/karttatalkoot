@@ -13,8 +13,9 @@ const jsHash =
 export default ({initialState, gmapsApiKey}) =>
   <html>
     <head>
-      <title>Node quickstart</title>
+      <title>Karttatalkoot - latu-urat yhdessä kartalle!</title>
       <link rel="stylesheet" href={`/public/bundle.css?hash=${cssHash}`}/>
+      <link rel="icon" type="image/png" href="/public/favicon.png"/>
     </head>
     <body>
       <div id="app" data-initial-state={JSON.stringify(initialState)}></div>
