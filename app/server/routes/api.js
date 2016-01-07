@@ -8,7 +8,7 @@ const preq = Promise.promisifyAll(request)
 export default (ctx, app) => {
   const base = ctx.LADUTFI_API_ROOT
 
-  app.get("/api/tracks", route.json(req =>
+  app.get("/api/tracks", route.json(() =>
     preq.getAsync(`${base}/trails`)
       .get("body")
       .then(JSON.parse)

@@ -3,12 +3,12 @@ import Kefir from "kefir"
 import {Combinator} from "react-combinators/kefir"
 import GoogleMapLoader from "react-google-maps/lib/GoogleMapLoader"
 import GoogleMap from "react-google-maps/lib/GoogleMap"
-import {stateless, stateful, mapItems} from "client/components"
+import {stateless} from "client/components"
 
 import {latLng} from "client/web/util/mapUtils"
 import MapContents from "./MapContents"
 
-/* global: google */
+/*global google*/
 
 export default stateless(({model}) =>
   <div className="full-screen">

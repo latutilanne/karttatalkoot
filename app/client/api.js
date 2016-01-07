@@ -10,7 +10,7 @@ const get = (url, queryParams = {}) => {
   const req =
     superagent
       .get(url)
-      .set('Accept', 'application/json')
+      .set("Accept", "application/json")
       .send(queryParams)
 
   return Kefir.fromNodeCallback(req.end.bind(req))

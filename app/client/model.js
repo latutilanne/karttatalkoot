@@ -1,6 +1,4 @@
-import Kefir from "kefir"
 import Model from "kefir-model"
-
 import {loadTracks} from "./api"
 
 

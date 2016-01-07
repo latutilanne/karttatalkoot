@@ -2,7 +2,7 @@ import React from "react"
 import Marker from "react-google-maps/lib/Marker"
 import {latLng} from "client/web/util/mapUtils"
 
-/* global: google */
+/*global google*/
 
 export default (map, {tracks}) => {
   // TODO: trail and track drawing logic here
