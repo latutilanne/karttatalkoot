@@ -4,7 +4,8 @@
   "plugins": [ "react" ],
   "rules": {
     "semi": [2, "never"],
-    "quotes": [2, "double"]
+    "quotes": [2, "double"],
+    "no-unused-vars": [2, {"varsIgnorePattern": "React"}]
   },
   "env": {
     "node": true,

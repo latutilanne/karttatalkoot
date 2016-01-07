@@ -1,5 +1,5 @@
 import React from "react"
-import {renderToString, renderToStaticMarkup} from "react-dom/server"
+import {renderToStaticMarkup} from "react-dom/server"
 import startServer from "server/startServer"
 import IndexPage from "./IndexPage"
 
