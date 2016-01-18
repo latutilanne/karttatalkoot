@@ -6,13 +6,13 @@ saatavat latu-urat sekä muut hiihtämistä edistävästä meta-tiedot
 [kartta.latutilanne.fi](http://kartta.latutilanne.fi) latutietoihin.
 
 [![Build-status](https://img.shields.io/travis/latutilanne/karttatalkoot/master.svg?style=flat-square)](https://travis-ci.org/latutilanne/karttatalkoot/branches/)
-[![Kehittäjien chat](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/latutilanne)
+[![Kehittäjien chat](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/latutilanne/karttatalkoot)
 
 ## Osallistuminen
 
 Kaikki apu otetaan vastaan! Huomioithan, että avun ei tarvitse olla ohjelmointia:
 **myös käyttöliittymäsuunnittelua ja grafiikkaa tarvitaan**. Liity kehittäjien keskusteluun
-**[Gitterissä](https://gitter.im/latutilanne)**!
+**[Gitterissä](https://gitter.im/latutilanne/karttatalkoot)**!
 
 Mikäli halaut osallistua tämän projektin kehitykseen, voit tehdä sen
 pull requestin avulla. Mikäli haluat luoda uuden ominaisuuden, luo siitä 
