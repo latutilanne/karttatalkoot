@@ -32,7 +32,7 @@
     "envify": "^3.4.0",
     "express": "^4.13.3",
     "kefir": "^3.2.0",
-    "kefir-model": "^0.1.1",
+    "kefir-model": "^0.1.2",
     "less": "^2.5.3",
     "less-plugin-autoprefix": "^1.5.1",
     "lodash": "^3.10.1",
