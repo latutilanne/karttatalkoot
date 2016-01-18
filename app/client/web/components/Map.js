@@ -23,7 +23,7 @@ export default stateless(({model}) =>
 // children are ok though
 const Map = model => {
   const pool = Kefir.pool()
-  const map = pool.filter(m => !!m).take(1).toProperty()
+  const map = pool.filter(m => !!m).toProperty()
 
   const mapOptions = {
     disableDefaultUI: true,
@@ -36,7 +36,7 @@ const Map = model => {
 
   return (
     <GoogleMap
-      ref={m => pool.plug(Kefir.constant(m))}
+      onMap={m => pool.plug(Kefir.constant(m))}
       options={mapOptions}
       defaultZoom={5}
       defaultCenter={latLng({lat: 64.24459, lon: 26.36718})}>
@@ -46,11 +46,15 @@ const Map = model => {
 }
 
 const withObservables = MapComponent => {
-  const {children, ...mapProps} = MapComponent.props
-  const ObsMap = ({map, containerTagName}) =>
-    <Combinator>
-      {React.cloneElement(MapComponent, {map, containerTagName})}
-    </Combinator>
+  const {children, onMap, ...mapProps} = MapComponent.props
+  const ObsMap = ({map, containerTagName}) => {
+    onMap(map)
+    return (
+      <Combinator>
+        {React.cloneElement(MapComponent, {map, containerTagName})}
+      </Combinator>
+    )
+  }
 
   return <ObsMap {...mapProps} />
 }
