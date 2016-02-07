@@ -40,7 +40,7 @@ export default initialState => {
     model.lens(lensProp("editedTrail"))
 
   // deselecting track resets edited trail
-  editedTrail.plug(selectedTrack.filter(t => !t).map(always(undefined)).map(always))
+  editedTrail.plug(selectedTrack.filter(t => !t).map(always(undefined)).map(always).delay(1))
 
   const startEditingTrail = id => {
     editedTrail.set({id, ways: []})
