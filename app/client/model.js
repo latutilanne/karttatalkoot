@@ -1,6 +1,6 @@
 import Kefir from "kefir"
 import atom from "kefir.atom"
-import {lensProp, find, prop, equals, compose, always, identity} from "ramda"
+import {lensProp, find, prop, equals, compose, always} from "ramda"
 import {loadTracks} from "./api"
 
 const idEq = id => compose(equals(id), prop("id"))
@@ -48,12 +48,12 @@ export default initialState => {
 
   const saveEditedTrail = () => {
     // TODO: save to server
-    console.log("saved")
+    console.log("saved")        // eslint-disable-line
     editedTrail.set(undefined)
   }
 
   const cancelEditedTrail = () => {
-    console.log("cancel")
+    console.log("cancel")       // eslint-disable-line
     editedTrail.set(undefined)
   }
 
