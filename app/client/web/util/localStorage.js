@@ -3,8 +3,7 @@ import {curry} from "ramda"
 export const store = curry((key, val) => {
   try {
     localStorage.setItem(`karttatalkoot:${key}`, JSON.stringify({val}))
-  } catch (ignore) {
-  }
+  } catch (ignore) { } // eslint-disable-line
 })
 
 export const load = (key, defaultValue) => {
