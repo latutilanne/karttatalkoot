@@ -5,8 +5,8 @@ import R from "react.reactive"
 import GoogleMapLoader from "react-google-maps/lib/GoogleMapLoader"
 import GoogleMap from "react-google-maps/lib/GoogleMap"
 import MapContents from "./MapContents"
-import {latLng} from "client/web/util/mapUtils"
-
+import {latLng, latLon} from "client/web/util/mapUtils"
+import {load, store} from "client/web/util/localStorage"
 
 /*global google*/
 
@@ -15,7 +15,9 @@ const { ControlPosition, ZoomControlStyle } = google.maps
 
 
 export default ({model}) => {
-  const map = atom()
+  const mapAtom = atom()
+  const googleMap =
+    mapAtom.map(m => m.props.map).toProperty()
 
   const mapOptions = {
     disableDefaultUI: true,
@@ -31,11 +33,13 @@ export default ({model}) => {
 
   const MapElem =
     <RGoogleMap
-      onMount={map.set}
+      onMount={mapAtom.set}
       options={mapOptions}
-      defaultZoom={5}
-      defaultCenter={latLng({lat: 64.24459, lon: 26.36718})}>
-      {MapContents(map.toProperty(), model).merge(Kefir.constant([]))}
+      defaultZoom={load("map:zoom", 5)}
+      defaultCenter={latLng(load("map:center", {lat: 64.24459, lon: 26.36718}))}
+      onZoomChanged={() => store("map:zoom", mapAtom.get().getZoom())}
+      onCenterChanged={() => store("map:center", latLon(mapAtom.get().getCenter()))}>
+      {MapContents(googleMap, model).merge(Kefir.constant([]))}
     </RGoogleMap>
 
   return (
