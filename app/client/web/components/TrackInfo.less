@@ -31,4 +31,17 @@
   h2, h3 {
     display: inline-block;
   }
+
+  .trails {
+    li:not(.edited) {
+      button.cancel, button.save {
+        display: none;
+      }
+    }
+    li.edited {
+      button.edit {
+        display: none;
+      }
+    }
+  }
 }

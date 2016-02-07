@@ -4,7 +4,14 @@ import R from "react.reactive"
 import {partial} from "ramda"
 
 export default ({model}) => {
-  const {selectedTrack, selectTrack} = model
+  const {
+    selectedTrack,
+    editedTrail,
+    selectTrack,
+    startEditingTrail,
+    saveEditedTrail,
+    cancelEditedTrail
+    } = model
 
   const trackInfoClassName =
     selectedTrack
@@ -12,6 +19,9 @@ export default ({model}) => {
       .toProperty()
 
   const closeTrack = partial(selectTrack, [ undefined ])
+
+  const trailClass = ({id}) =>
+    editedTrail.map(t => t && t.id === id ? "edited" : "")
 
   return (
     <R.div className={trackInfoClassName}>
@@ -22,7 +32,20 @@ export default ({model}) => {
 
           <h4>Radat</h4>
           <ul className="trails">
-            {trails.map(trail => <li key={trail.id}>{trail.name}</li>)}
+            {trails.map(trail => (
+              <R.li key={trail.id} className={trailClass(trail)}>
+                {trail.name}
+                <button className="edit" onClick={partial(startEditingTrail, [trail.id])}>
+                  Editoi
+                </button>
+                <button className="save" onClick={partial(saveEditedTrail, [])}>
+                  Tallenna
+                </button>
+                <button className="cancel" onClick={partial(cancelEditedTrail, [])}>
+                  Peruuta
+                </button>
+              </R.li>
+            ))}
           </ul>
           <button className="close-btn" onClick={closeTrack}>
             Sulje
