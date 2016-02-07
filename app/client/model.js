@@ -1,36 +1,29 @@
-import Model from "kefir-model"
-import _ from "lodash"
-import {dispatch, observe} from "./dispatcher"
+import Kefir from "kefir"
+import atom from "kefir.atom"
+import {lensProp, find, prop, equals, compose, always} from "ramda"
 import {loadTracks} from "./api"
 
 
-export default initial => {
-  const withDefaults = {
+export default initialState => {
+  const model = atom({
     tracks: [],
-    ...initial
-  }
+    ...initialState
+  })
 
-  // methods
-  const selectTrack = id =>
-    dispatch("track:select", id)
-
-
-  const model =
-    Model(withDefaults)
-
-  // props
+  // all tracks
   const tracks =
-    model.lens("tracks")
+    model.lens(lensProp("tracks"))
 
+  tracks.plug(loadTracks().map(always))
+
+
+  // selected track
+  const selectedTrackId = atom(null)
   const selectedTrack =
-    model.lens("selectedTrack")
+    Kefir.combine([tracks, selectedTrackId])
+      .map(([tracks, id]) => find(compose(equals(id), prop("id")), tracks))
+      .toProperty()
 
-
-  tracks.plug(loadTracks())
-
-  selectedTrack.plug(
-    tracks.sampledBy(observe("track:select"), (tracks, id) => _.find(tracks, {id}))
-  )
 
 
   return {
@@ -39,6 +32,6 @@ export default initial => {
     selectedTrack,
 
     // methods
-    selectTrack
+    selectTrack: selectedTrackId.set
   }
 }

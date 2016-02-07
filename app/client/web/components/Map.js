@@ -1,60 +1,49 @@
 import React from "react"
 import Kefir from "kefir"
-import {Combinator} from "react-combinators/kefir"
+import atom from "kefir.atom"
+import R from "react.reactive"
 import GoogleMapLoader from "react-google-maps/lib/GoogleMapLoader"
 import GoogleMap from "react-google-maps/lib/GoogleMap"
-import {stateless} from "client/components"
-
-import {latLng} from "client/web/util/mapUtils"
 import MapContents from "./MapContents"
+import {latLng} from "client/web/util/mapUtils"
+
 
 /*global google*/
 
-export default stateless(({model}) =>
-  <div className="full-screen">
-    <GoogleMapLoader
-      containerElement={<div className="full-screen"></div>}
-      googleMapElement={withObservables(Map(model))}
-    />
-  </div>
-)
+const RGoogleMap = R(GoogleMap)
+const { ControlPosition, ZoomControlStyle } = google.maps
 
-// ATTENTION: DO NOT place observables into GoogMap props!
-// children are ok though
-const Map = model => {
-  const pool = Kefir.pool()
-  const map = pool.filter(m => !!m).toProperty()
+
+export default ({model}) => {
+  const map = atom()
 
   const mapOptions = {
     disableDefaultUI: true,
     zoomControl: true,
     zoomControlOptions: {
-      position: google.maps.ControlPosition.LEFT_BOTTOM,
-      style: google.maps.ZoomControlStyle.SMALL
+      position: ControlPosition.LEFT_BOTTOM,
+      style: ZoomControlStyle.SMALL
     }
   }
 
-  return (
-    <GoogleMap
-      onMap={m => pool.plug(Kefir.constant(m))}
+  const MapContainer =
+    <div className="full-screen"></div>
+
+  const MapElem =
+    <RGoogleMap
+      onMount={map.set}
       options={mapOptions}
       defaultZoom={5}
       defaultCenter={latLng({lat: 64.24459, lon: 26.36718})}>
-      {MapContents(map, model)}
-    </GoogleMap>
+      {MapContents(map.toProperty(), model).merge(Kefir.constant([]))}
+    </RGoogleMap>
+
+  return (
+    <div className="full-screen">
+      <GoogleMapLoader
+        containerElement={MapContainer}
+        googleMapElement={MapElem}
+      />
+    </div>
   )
-}
-
-const withObservables = MapComponent => {
-  const {children, onMap, ...mapProps} = MapComponent.props
-  const ObsMap = ({map, containerTagName}) => {
-    onMap(map)
-    return (
-      <Combinator>
-        {React.cloneElement(MapComponent, {map, containerTagName})}
-      </Combinator>
-    )
-  }
-
-  return <ObsMap {...mapProps} />
 }

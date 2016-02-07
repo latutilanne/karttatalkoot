@@ -1,10 +1,9 @@
 import React from "react"
 import Kefir from "kefir"
-import _ from "lodash"
-import {stateless} from "client/components"
+import R from "react.reactive"
+import {partial} from "ramda"
 
-
-export default stateless(({model}) => {
+export default ({model}) => {
   const {selectedTrack, selectTrack} = model
 
   const trackInfoClassName =
@@ -12,27 +11,29 @@ export default stateless(({model}) => {
       .map(t => "track-info " + (t ? "open" : "hidden"))
       .toProperty()
 
-
-  const renderTrack = track => !track ? Kefir.later(600, null) : Kefir.constant(
-    <div>
-      <h2>{track.name}</h2>
-      <h3>{track.city}</h3>
-
-      <h4>Radat</h4>
-      <ul className="trails">
-        {track.trails.map(trail => (
-          <li key={trail.id}>{trail.name}</li>
-        ))}
-      </ul>
-      <button className="close-btn" onClick={_.partial(selectTrack, undefined)}>
-        Sulje
-      </button>
-    </div>
-  )
+  const closeTrack = partial(selectTrack, [ undefined ])
 
   return (
-    <div className={trackInfoClassName}>
-      {selectedTrack.flatMapLatest(renderTrack)}
-    </div>
+    <R.div className={trackInfoClassName}>
+      {selectedTrack.flatMapLatest(withAnimation(({name, city, trails}) =>
+        <div>
+          <h2>{name}</h2>
+          <h3>{city}</h3>
+
+          <h4>Radat</h4>
+          <ul className="trails">
+            {trails.map(trail => <li key={trail.id}>{trail.name}</li>)}
+          </ul>
+          <button className="close-btn" onClick={closeTrack}>
+            Sulje
+          </button>
+        </div>
+      ))}
+    </R.div>
   )
-})
+}
+
+// slide animation requires 500 ms so we can't destroy previous
+// element before that
+const withAnimation = render => track =>
+  track ? Kefir.constant(render(track)) : Kefir.later(600, null)

@@ -1,19 +1,23 @@
-import _ from "lodash"
+import R from "ramda"
 import * as api from "./api"
+
+const typeEq = val =>
+  R.pipe(R.prop("type"), R.equals(val))
+
+const dataWithNodes = (nodesById, data) => R.pipe(
+  R.filter(typeEq("way")),
+  R.uniqBy(R.prop("id")),
+  R.map(way => ({
+    ...way,
+    nodes: R.filter(R.identity, R.map(id => nodesById[id], way.nodes))
+  })))(data)
+
 
 export const loadWays = ({n, s, w, e}) => {
   return api.loadWays({n, e, s, w}).map(data => {
     const nodesById =
-      _(data)
-        .filter({type: "node"})
-        .indexBy("id")
-        .valueOf()
-
-    return _(data)
-      .filter({type: "way"})
-      .indexBy("id")
-      .values()
-      .map(way => ({...way, nodes: _.compact(_.map(way.nodes, id => nodesById[id]))}))
-      .valueOf()
+      R.indexBy(R.prop("id"), R.filter(typeEq("node"), data))
+    
+    return dataWithNodes(nodesById, data)
   })
 }

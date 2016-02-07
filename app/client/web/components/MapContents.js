@@ -1,15 +1,15 @@
 import React from "react"
 import Kefir from "kefir"
-import {partial, concat, isEqual} from "lodash"
 import Marker from "react-google-maps/lib/Marker"
 import Polyline from "react-google-maps/lib/Polyline"
+import {partial, equals} from "ramda"
 import {loadWays} from "client/osm"
 import {latLng, mapBoundsAsBB} from "client/web/util/mapUtils"
 
 
 /*global google*/
 
-export default (map, {tracks, selectTrack}) => {
+export default (googleMap, {tracks, selectTrack}) => {
   const asMarkers = tracks =>
     tracks.map(t => (
       <Marker
@@ -17,7 +17,7 @@ export default (map, {tracks, selectTrack}) => {
         position={latLng(t.location)}
         title={t.name}
         icon={markerIcon(t)}
-        onClick={partial(selectTrack, t.id)}
+        onClick={partial(selectTrack, [ t.id ])}
       />
     ))
 
@@ -33,7 +33,7 @@ export default (map, {tracks, selectTrack}) => {
 
 
   const mapBoundChanges =
-    Kefir.merge([observeMapEvent(map, "zoom_changed"), observeMapEvent(map, "center_changed")])
+    Kefir.merge([observeMapEvent(googleMap, "zoom_changed"), observeMapEvent(googleMap, "center_changed")])
 
   const lines =
     mapBoundChanges
@@ -43,12 +43,13 @@ export default (map, {tracks, selectTrack}) => {
         bb: m.getBounds() ? mapBoundsAsBB(m.getBounds()) : null
       }))
       .flatMapLatest(({zoom, bb}) => !bb || zoom < 11 ? Kefir.constant([]) : loadWays(bb))
-      .skipDuplicates(isEqual)
+      .skipDuplicates(equals)
       .map(asPolyLines)
 
 
   // TODO: trail and track drawing logic here
-  return Kefir.combine([lines, markers]).map(concat)
+  return Kefir.combine([lines, markers])
+    .map(([l, m]) => [...l, ...m])
 }
 
 
