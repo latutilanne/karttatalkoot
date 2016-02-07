@@ -1,0 +1,34 @@
+@import "../_globals";
+
+@info-width: 400px;
+
+
+.track-info {
+
+  display: block;
+  box-sizing: border-box;
+  position: fixed;
+  top: @spacing-s;
+
+  transition: left 0.5s;
+  &.hidden {
+    left: -@info-width - 2 * @spacing-s;
+  }
+  &.open {
+    left: @spacing-s;
+  }
+
+  width: @info-width;
+
+  background: white;
+  padding: @spacing-m;
+
+  h2:after {
+    content: ',';
+    margin-right: @spacing-s;
+  }
+
+  h2, h3 {
+    display: inline-block;
+  }
+}

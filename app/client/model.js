@@ -1,20 +1,37 @@
-import Model from "kefir-model"
+import Kefir from "kefir"
+import atom from "kefir.atom"
+import {lensProp, find, prop, equals, compose, always} from "ramda"
 import {loadTracks} from "./api"
 
 
-export default initial => {
-  const withDefaults = {
+export default initialState => {
+  const model = atom({
     tracks: [],
-    ...initial
-  }
+    ...initialState
+  })
 
-  const model =
-    Model(withDefaults)
-
+  // all tracks
   const tracks =
-    model.lens("tracks")
+    model.lens(lensProp("tracks"))
 
-  tracks.plug(loadTracks())
+  tracks.plug(loadTracks().map(always))
 
-  return { tracks }
+
+  // selected track
+  const selectedTrackId = atom(null)
+  const selectedTrack =
+    Kefir.combine([tracks, selectedTrackId])
+      .map(([tracks, id]) => find(compose(equals(id), prop("id")), tracks))
+      .toProperty()
+
+
+
+  return {
+    // props
+    tracks,
+    selectedTrack,
+
+    // methods
+    selectTrack: selectedTrackId.set
+  }
 }

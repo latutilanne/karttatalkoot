@@ -1,56 +1,78 @@
 import React from "react"
-import Kefir from "kefir"
-import {Combinator} from "react-combinators/kefir"
 import GoogleMapLoader from "react-google-maps/lib/GoogleMapLoader"
 import GoogleMap from "react-google-maps/lib/GoogleMap"
-import {stateless} from "client/components"
+import {latLng, latLon} from "client/web/util/mapUtils"
+import {load, store} from "client/web/util/localStorage"
 
-import {latLng} from "client/web/util/mapUtils"
-import MapContents from "./MapContents"
+import manageMarkers from "./map/manageMarkers"
+import managePolyLines from "./map/managePolylines"
 
 /*global google*/
 
-export default stateless(({model}) =>
-  <div className="full-screen">
-    <GoogleMapLoader
-      containerElement={<div className="full-screen"></div>}
-      googleMapElement={withObservables(Map(model))}
-    />
-  </div>
-)
+const { ControlPosition, ZoomControlStyle } = google.maps
 
-// ATTENTION: DO NOT place observables into GoogMap props!
-// children are ok though
-const Map = model => {
-  const pool = Kefir.pool()
-  const map = pool.filter(m => !!m).take(1).toProperty()
 
-  const mapOptions = {
-    disableDefaultUI: true,
-    zoomControl: true,
-    zoomControlOptions: {
-      position: google.maps.ControlPosition.LEFT_BOTTOM,
-      style: google.maps.ZoomControlStyle.SMALL
+export default React.createClass({
+
+  // we are using constant observable model so no need to re-render
+  // after initial map render
+  shouldComponentUpdate() {
+    return false
+  },
+
+  componentWillUnmount() {
+    this.state.disposables.forEach(d => d.call())
+  },
+
+  startManagingMap({props: {map}}) {
+    const {model} = this.props
+    this.setState({
+      map,
+      disposables: [
+        manageMarkers(map, model),
+        managePolyLines(map, model)
+      ]
+    })
+  },
+
+  handleZoomChange() {
+    store("map:zoom", this.state.map.getZoom())
+  },
+
+  handleCenterChange() {
+    store("map:center", latLon(this.state.map.getCenter()))
+  },
+
+  render() {
+    const mapOptions = {
+      disableDefaultUI: true,
+      zoomControl: true,
+      zoomControlOptions: {
+        position: ControlPosition.LEFT_BOTTOM,
+        style: ZoomControlStyle.SMALL
+      }
     }
+
+    const MapContainer =
+      <div className="full-screen"></div>
+
+    const MapElem =
+      <GoogleMap
+        ref={this.startManagingMap}
+        options={mapOptions}
+        defaultZoom={load("map:zoom", 5)}
+        defaultCenter={latLng(load("map:center", {lat: 64.24459, lon: 26.36718}))}
+        onZoomChanged={this.handleZoomChange}
+        onCenterChanged={this.handleCenterChange}
+      />
+
+    return (
+      <div className="full-screen">
+        <GoogleMapLoader
+          containerElement={MapContainer}
+          googleMapElement={MapElem}
+        />
+      </div>
+    )
   }
-
-  return (
-    <GoogleMap
-      ref={m => pool.plug(Kefir.constant(m))}
-      options={mapOptions}
-      defaultZoom={5}
-      defaultCenter={latLng({lat: 64.24459, lon: 26.36718})}>
-      {MapContents(map, model)}
-    </GoogleMap>
-  )
-}
-
-const withObservables = MapComponent => {
-  const {children, ...mapProps} = MapComponent.props
-  const ObsMap = ({map, containerTagName}) =>
-    <Combinator>
-      {React.cloneElement(MapComponent, {map, containerTagName})}
-    </Combinator>
-
-  return <ObsMap {...mapProps} />
-}
+})
